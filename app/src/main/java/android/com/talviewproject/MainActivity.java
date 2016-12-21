@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
@@ -83,7 +84,14 @@ public class MainActivity extends AppCompatActivity {
             // will close the app if the device does't have camera
             finish();
         } else {
-            captureImage();
+            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1) {
+                // Marshmallow+
+                CameraPermission();
+            }else{
+                //below Marshmallow
+                captureImage();
+            }
+
         }
     }
 
@@ -189,6 +197,7 @@ public class MainActivity extends AppCompatActivity {
                 // Show an explanation to the user *asynchronously* -- don't block
                 // this thread waiting for the user's response! After the user
                 // sees the explanation, try again to request the permission.
+                captureImage();
 
             } else {
 
@@ -250,11 +259,12 @@ public class MainActivity extends AppCompatActivity {
 
                     // permission was granted, yay! Do the
                     // contacts-related task you need to do.
-
+                    captureImage();
                 } else {
 
                     // permission denied, boo! Disable the
                     // functionality that depends on this permission.
+                    Toast.makeText(this,"Please provide camera permission", Toast.LENGTH_LONG);
                 }
                 return;
             }
@@ -268,7 +278,7 @@ public class MainActivity extends AppCompatActivity {
                     // contacts-related task you need to do.
 
                 } else {
-
+                    Toast.makeText(this,"Please provide External Storage permission", Toast.LENGTH_LONG);
                     // permission denied, boo! Disable the
                     // functionality that depends on this permission.
                 }
